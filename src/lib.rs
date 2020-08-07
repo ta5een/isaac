@@ -1,16 +1,10 @@
 #[derive(Debug, Eq, PartialEq)]
-pub struct Arena<T>
-where
-    T: PartialEq,
-{
+pub struct Arena<T> {
     nodes: Vec<Node<T>>,
     root: Option<NodeId>,
 }
 
-impl<T> Arena<T>
-where
-    T: PartialEq,
-{
+impl<T> Arena<T> {
     /// Creates a new empty `Arena`.
     pub fn new() -> Self {
         Self::default()
@@ -67,10 +61,7 @@ where
     }
 }
 
-impl<T> Default for Arena<T>
-where
-    T: PartialEq,
-{
+impl<T> Default for Arena<T> {
     fn default() -> Self {
         Self { nodes: Vec::new(), root: None }
     }
@@ -84,10 +75,7 @@ pub struct Node<T> {
     children: Vec<NodeId>,
 }
 
-impl<T> Node<T>
-where
-    T: PartialEq,
-{
+impl<T> Node<T> {
     /// Creates a new `Node` with the given `NodeId` index and data.
     pub fn new<Id>(id: Id, data: T) -> Self
     where
