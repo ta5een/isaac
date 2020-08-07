@@ -5,74 +5,102 @@ use std::rc::Rc;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 enum Syntax {
-    Root,
     Node(SyntaxNode),
     Token(SyntaxToken),
 }
 
 fn main() {
-    // 1 + 2 * 1 + foo
-    // ---------------
-    //       +
-    //      / \
-    //     1   +
+    // a * (-2 + a) - 10
+    // -----------------
+    //         -
     //        / \
-    //       *   foo
+    //       *   10
     //      / \
-    //     2   1
-    let mut arena = Arena::new();
+    //     a   +
+    //        / \
+    //       -   a
+    //       |
+    //       2
+    let arena = &mut Arena::new();
 
-    let raw_lit_one =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal(Literal::Integer), "1"));
-    let raw_sym_plus =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol(Symbol::Plus), "+"));
-    let raw_lit_two =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal(Literal::Integer), "2"));
-    let raw_sym_asterisk =
+    let raw_token_symbol_minus =
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol(Symbol::Minus), "-"));
+    let raw_token_symbol_asterisk =
         Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol(Symbol::Asterisk), "*"));
-    let raw_idt_foo =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Identifier, "foo"));
+    let raw_token_identifier_a =
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Identifier, "a"));
+    let raw_token_symbol_plus =
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol(Symbol::Plus), "+"));
+    let raw_token_literal_two =
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal(Literal::Integer), "2"));
+    let raw_token_literal_ten =
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal(Literal::Integer), "2"));
 
-    let root =
-        arena.insert(Syntax::Root);
-    let binary_one_plus_expr =
-        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Binary))));
-    let binary_two_times_one =
-        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Binary))));
-    let binary_expr_plus_foo =
-        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Binary))));
+    let node_expr_binary =
+        Rc::new(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Binary))));
+    let node_expr_unary =
+        Rc::new(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Unary))));
 
-    let lit_one_1 =
-        arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_lit_one), 0, 1)));
-    let sym_plus_1 =
-        arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_sym_plus), 2, 1)));
-    let lit_two =
-        arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_lit_two), 4, 1)));
-    let sym_asterisk =
-        arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_sym_asterisk), 6, 1)));
-    let lit_one_2 =
-        arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_lit_one), 8, 1)));
-    let sym_plus_2 =
-        arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_sym_plus), 10, 1)));
-    let idt_foo =
-        arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_idt_foo), 12, 3)));
+    let token_symbol_minus_1 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_symbol_minus), 13, 1)));
+    let token_symbol_asterisk_1 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_symbol_asterisk), 2, 1)));
+    let token_identifier_a_1 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_identifier_a), 0, 1)));
+    let token_symbol_plus_1 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_symbol_plus), 8, 1)));
+    let token_symbol_minus_2 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_symbol_minus), 5, 1)));
+    let token_literal_two_1 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_literal_two), 6, 1)));
+    let token_identifier_a_2 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_identifier_a), 10, 1)));
+    let token_literal_ten_1 =
+        Rc::new(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_token_literal_ten), 15, 2)));
 
-    root.add_child(&mut arena, binary_one_plus_expr);
+    let arena_token_minus_1 =
+        arena.insert(Rc::clone(&token_symbol_minus_1));
+    let arena_binary_minus_1 =
+        arena.insert(Rc::clone(&node_expr_binary));
+    let arena_token_asterisk_1 =
+        arena.insert(Rc::clone(&token_symbol_asterisk_1));
+    let arena_binary_asterisk_1 =
+        arena.insert(Rc::clone(&node_expr_binary));
+    let arena_token_identifier_a_1 =
+        arena.insert(Rc::clone(&token_identifier_a_1));
+    let arena_token_plus_1 =
+        arena.insert(Rc::clone(&token_symbol_plus_1));
+    let arena_binary_plus_1 =
+        arena.insert(Rc::clone(&node_expr_binary));
+    let arena_token_minus_2 =
+        arena.insert(Rc::clone(&token_symbol_minus_2));
+    let arena_unary_minus_1 =
+        arena.insert(Rc::clone(&node_expr_unary));
+    let arena_token_literal_two_1 =
+        arena.insert(Rc::clone(&token_literal_two_1));
+    let arena_token_identifier_a_2 =
+        arena.insert(Rc::clone(&token_identifier_a_2));
+    let arena_token_literal_ten =
+        arena.insert(Rc::clone(&token_literal_ten_1));
 
-    binary_one_plus_expr
-        .add_child(&mut arena, lit_one_1)
-        .add_child(&mut arena, sym_plus_1)
-        .add_child(&mut arena, binary_expr_plus_foo);
+    arena_binary_minus_1
+        .add_child(arena, arena_binary_asterisk_1)
+        .add_child(arena, arena_token_minus_1)
+        .add_child(arena, arena_token_literal_ten);
 
-    binary_expr_plus_foo
-        .add_child(&mut arena, binary_two_times_one)
-        .add_child(&mut arena, sym_plus_2)
-        .add_child(&mut arena, idt_foo);
+    arena_binary_asterisk_1
+        .add_child(arena, arena_token_identifier_a_1)
+        .add_child(arena, arena_token_asterisk_1)
+        .add_child(arena, arena_binary_plus_1);
 
-    binary_two_times_one
-        .add_child(&mut arena, lit_two)
-        .add_child(&mut arena, sym_asterisk)
-        .add_child(&mut arena, lit_one_2);
+    arena_binary_plus_1
+        .add_child(arena, arena_unary_minus_1)
+        .add_child(arena, arena_token_plus_1)
+        .add_child(arena, arena_token_identifier_a_2);
 
-    println!("{:#?}", arena.nodes());
+    arena_unary_minus_1
+        .add_child(arena, arena_token_minus_2)
+        .add_child(arena, arena_token_literal_two_1);
+
+    println!("{:#?}", arena);
 }

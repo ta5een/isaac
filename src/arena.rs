@@ -143,19 +143,19 @@ impl NodeId {
     ///
     /// ```rust
     /// # use crate::tree::arena::{Arena, NodeId};
-    /// let mut arena = Arena::new();
+    /// let mut arena = &mut Arena::new();
     /// let root_node = arena.insert("1");
     /// let second_node = arena.insert("2");
     ///
     /// // Make `root_node` the parent of `second_node`.
-    /// second_node.set_parent(&mut arena, root_node);
-    /// assert_eq!(second_node.parent(&arena), Some(NodeId::from(0)));
+    /// second_node.set_parent(arena, root_node);
+    /// assert_eq!(second_node.parent(arena), Some(NodeId::from(0)));
     ///
     /// // Note that this does not add `second_node` as a child to `root_node`;
     /// // this must be done manually. Use the `Node::add_child` method instead
     /// // to have this handled for you.
-    /// root_node.add_child(&mut arena, second_node);
-    /// assert_eq!(root_node.children(&arena), &vec![NodeId::from(1)]);
+    /// root_node.add_child(arena, second_node);
+    /// assert_eq!(root_node.children(arena), &vec![NodeId::from(1)]);
     /// ```
     pub fn set_parent<T, P>(&self, arena: &mut Arena<T>, new_parent: P) -> &Self
     where
@@ -177,15 +177,15 @@ impl NodeId {
     ///
     /// ```rust
     /// # use crate::tree::arena::{Arena, NodeId};
-    /// let mut arena = Arena::new();
+    /// let arena = &mut Arena::new();
     /// let root_node = arena.insert("1");
     /// let second_node = arena.insert("2");
     ///
     /// // Make `second_node` a child of `root_node`.
-    /// root_node.add_child(&mut arena, second_node);
+    /// root_node.add_child(arena, second_node);
     ///
-    /// assert_eq!(root_node.children(&arena), &vec![NodeId::from(1)]);
-    /// assert_eq!(second_node.parent(&arena), Some(NodeId::from(0)));
+    /// assert_eq!(root_node.children(arena), &vec![NodeId::from(1)]);
+    /// assert_eq!(second_node.parent(arena), Some(NodeId::from(0)));
     /// ```
     ///
     /// Conveniently, this method returns a reference to the node being mutated
@@ -193,17 +193,17 @@ impl NodeId {
     ///
     /// ```rust
     /// # use crate::tree::arena::{Arena, NodeId};
-    /// let mut arena = Arena::new();
+    /// let arena = &mut Arena::new();
     /// let root_node = arena.insert("1");
     /// let second_node = arena.insert("2");
     /// let third_node = arena.insert("3");
     ///
     /// // Method chaining
     /// root_node
-    ///     .add_child(&mut arena, second_node)
-    ///     .add_child(&mut arena, third_node);
+    ///     .add_child(arena, second_node)
+    ///     .add_child(arena, third_node);
     ///
-    /// assert_eq!(root_node.children(&arena), &vec![
+    /// assert_eq!(root_node.children(arena), &vec![
     ///     NodeId::from(1),
     ///     NodeId::from(2)
     /// ]);
@@ -235,7 +235,7 @@ mod tests {
         //   2   3
         //       |
         //       4
-        let mut arena = Arena::new();
+        let arena = &mut Arena::new();
 
         let str_one   = arena.insert("1");
         let str_two   = arena.insert("2");
@@ -243,13 +243,13 @@ mod tests {
         let str_four  = arena.insert("4");
 
         str_one
-            .add_child(&mut arena, str_two)
-            .add_child(&mut arena, str_three);
+            .add_child(arena, str_two)
+            .add_child(arena, str_three);
 
         str_three
-            .add_child(&mut arena, str_four);
+            .add_child(arena, str_four);
 
-        assert_eq!(arena, Arena {
+        assert_eq!(*arena, Arena {
             nodes: vec![
                 Node {
                     id: NodeId(0),
