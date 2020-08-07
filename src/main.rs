@@ -1,8 +1,6 @@
-mod token;
-
 use tree::arena::Arena;
 use tree::node::*;
-use token::*;
+use tree::token::*;
 use std::rc::Rc;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -25,24 +23,24 @@ fn main() {
     let mut arena = Arena::new();
 
     let raw_lit_one =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal, "1"));
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal(Literal::Integer), "1"));
     let raw_sym_plus =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol, "+"));
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol(Symbol::Plus), "+"));
     let raw_lit_two =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal, "2"));
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Literal(Literal::Integer), "2"));
     let raw_sym_asterisk =
-        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol, "*"));
+        Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Symbol(Symbol::Asterisk), "*"));
     let raw_idt_foo =
         Rc::new(RawSyntaxTokenData::new(SyntaxTokenKind::Identifier, "foo"));
 
     let root =
         arena.insert(Syntax::Root);
     let binary_one_plus_expr =
-        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::BinaryExpression)));
+        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Binary))));
     let binary_two_times_one =
-        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::BinaryExpression)));
+        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Binary))));
     let binary_expr_plus_foo =
-        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::BinaryExpression)));
+        arena.insert(Syntax::Node(SyntaxNode::new(SyntaxNodeKind::Expr(Expr::Binary))));
 
     let lit_one_1 =
         arena.insert(Syntax::Token(SyntaxToken::new(Rc::clone(&raw_lit_one), 0, 1)));

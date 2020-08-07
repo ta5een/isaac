@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use std::rc::Rc;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -30,16 +28,38 @@ impl RawSyntaxTokenData {
     }
 }
 
-
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxTokenKind {
     Identifier,
-    Keyword,
-    Literal,
-    Symbol,
+    Keyword(Keyword),
+    Literal(Literal),
+    Symbol(Symbol),
+}
+
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub enum Keyword {
+    Def,
+    Let,
+}
+
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub enum Literal {
+    Char,
+    Float,
+    Integer,
+    String,
+}
+
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub enum Symbol {
+    Asterisk,
+    Eq,
+    Minus,
+    Plus,
 }
 
 #[test]
 fn test_syntax_token() {
     println!("{}", std::mem::size_of::<SyntaxToken>());
+    println!("{}", std::mem::size_of::<SyntaxTokenKind>());
 }

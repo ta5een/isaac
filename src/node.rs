@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SyntaxNode {
     kind: SyntaxNodeKind,
@@ -13,6 +11,19 @@ impl SyntaxNode {
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxNodeKind {
-    BinaryExpression,
-    LiteralExpression,
+    Expr(Expr),
+}
+
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+pub enum Expr {
+    Binary,
+    Identifier,
+    Literal,
+    Unary,
+}
+
+#[test]
+fn test_syntax_node() {
+    println!("{}", std::mem::size_of::<SyntaxNode>());
+    println!("{}", std::mem::size_of::<SyntaxNodeKind>());
 }
