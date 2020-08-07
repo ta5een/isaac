@@ -28,6 +28,7 @@ impl RawSyntaxTokenData {
     }
 }
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum SyntaxTokenKind {
     Identifier,
@@ -36,12 +37,14 @@ pub enum SyntaxTokenKind {
     Symbol(Symbol),
 }
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Keyword {
     Def,
     Let,
 }
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Literal {
     Char,
@@ -50,6 +53,7 @@ pub enum Literal {
     String,
 }
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Symbol {
     Asterisk,

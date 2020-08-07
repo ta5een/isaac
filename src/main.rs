@@ -1,6 +1,8 @@
-use tree::arena::Arena;
-use tree::node::*;
-use tree::token::*;
+mod syntax;
+
+use cavea::Arena;
+use syntax::node::*;
+use syntax::token::*;
 use std::rc::Rc;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -103,6 +105,5 @@ fn main() {
         .add_child(arena, arena_token_literal_two_1);
 
     arena.set_root(arena_unary_minus_1);
-    println!("{:#?}", arena.root());
-    println!("{:#?}", arena.len());
+    println!("{:#?}", arena);
 }

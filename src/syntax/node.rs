@@ -17,7 +17,6 @@ pub enum SyntaxNodeKind {
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum Expr {
     Binary,
-    Literal,
     Unary,
 }
 
