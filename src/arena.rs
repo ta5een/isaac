@@ -6,6 +6,7 @@ where
     T: PartialEq,
 {
     nodes: Vec<Node<T>>,
+    root: Option<NodeId>,
 }
 
 impl<T> Arena<T>
@@ -17,9 +18,27 @@ where
         Self::default()
     }
 
+    /// Returns the number of nodes currently allocated in the `Arena` instance.
+    pub fn len(&self) -> usize {
+        self.nodes.len()
+    }
+
     /// Returns a reference to the `Arena`'s nodes.
     pub fn nodes(&self) -> &Vec<Node<T>> {
         &self.nodes
+    }
+
+    /// Returns the root `NodeId` index of the `Arena`.
+    pub fn root(&self) -> Option<NodeId> {
+        self.root
+    }
+
+    /// Sets a new root for the `Arena`.
+    pub fn set_root<Id>(&mut self, root: Id)
+    where
+        Id: Into<Option<NodeId>>,
+    {
+        self.root = root.into()
     }
 
     /// Returns a reference to a `Node` at the given `NodeId` index.
@@ -35,9 +54,17 @@ where
     /// Inserts a new value into the arena and returns its `NodeId` index.
     ///
     /// New data will be appended to the end of the arena's internal vector.
+    /// If this is the first time a value is inserted into the `Arena`, its
+    /// index will be set as the new root.
     pub fn insert(&mut self, data: T) -> NodeId {
         let index = self.nodes.len();
         self.nodes.push(Node::new(index, data));
+
+        // Set new node as root if this is our first time inserting
+        if index == 0 {
+            self.root = Some(NodeId(index));
+        }
+
         NodeId(index)
     }
 }
@@ -47,7 +74,7 @@ where
     T: PartialEq,
 {
     fn default() -> Self {
-        Self { nodes: Vec::new() }
+        Self { nodes: Vec::new(), root: None }
     }
 }
 
@@ -276,6 +303,7 @@ mod tests {
                     children: vec![],
                 },
             ],
+            root: Some(NodeId(0)),
         });
     }
 }

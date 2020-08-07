@@ -102,5 +102,7 @@ fn main() {
         .add_child(arena, arena_token_minus_2)
         .add_child(arena, arena_token_literal_two_1);
 
-    println!("{:#?}", arena);
+    arena.set_root(arena_unary_minus_1);
+    println!("{:#?}", arena.root());
+    println!("{:#?}", arena.len());
 }
