@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct SyntaxToken {
     raw: Rc<RawSyntaxTokenData>,
     start: usize,
@@ -13,7 +13,7 @@ impl SyntaxToken {
     }
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct RawSyntaxTokenData {
     kind: SyntaxTokenKind,
     text: String,
@@ -29,7 +29,7 @@ impl RawSyntaxTokenData {
 }
 
 #[allow(dead_code)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum SyntaxTokenKind {
     Identifier,
     Keyword(Keyword),
@@ -38,14 +38,14 @@ pub enum SyntaxTokenKind {
 }
 
 #[allow(dead_code)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Keyword {
     Def,
     Let,
 }
 
 #[allow(dead_code)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Literal {
     Char,
     Float,
@@ -54,12 +54,15 @@ pub enum Literal {
 }
 
 #[allow(dead_code)]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Symbol {
     Asterisk,
     Eq,
     Minus,
     Plus,
+    ForwardSlash,
+    LParen,
+    RParen,
 }
 
 #[test]
