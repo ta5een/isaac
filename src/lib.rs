@@ -38,6 +38,19 @@ impl<T> Arena<T> {
         &mut self.nodes[id.index()]
     }
 
+    /// Retrieves an optional reference to a `Node` at the given `NodeId` index.
+    pub fn node_at(&self, id: NodeId) -> Option<&Node<T>> {
+        self.nodes.get(id.index())
+    }
+
+    /// Returns a new vector of all the nodes present in the `Arena`.
+    pub fn nodes(&self) -> Vec<Node<T>>
+    where
+        T: Clone,
+    {
+        self.nodes.clone()
+    }
+
     /// Inserts a new value into the arena and returns its `NodeId` index.
     ///
     /// New data will be appended to the end of the arena's internal vector.
