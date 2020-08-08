@@ -15,20 +15,15 @@ impl<T> Arena<T> {
         self.nodes.len()
     }
 
-    /// Returns a reference to the `Arena`'s nodes.
-    pub fn nodes(&self) -> &Vec<Node<T>> {
-        &self.nodes
-    }
-
     /// Returns the root `NodeId` index of the `Arena`.
     pub fn root(&self) -> Option<NodeId> {
         self.root
     }
 
     /// Sets a new root for the `Arena`.
-    pub fn set_root<Id>(&mut self, root: Id)
+    pub fn set_root<OptionalId>(&mut self, root: OptionalId)
     where
-        Id: Into<Option<NodeId>>,
+        OptionalId: Into<Option<NodeId>>,
     {
         self.root = root.into()
     }
@@ -101,9 +96,9 @@ impl<T> Node<T> {
     }
 
     /// Sets the parent of this node.
-    pub fn set_parent<Id>(&mut self, new_parent: Id)
+    pub fn set_parent<OptionalId>(&mut self, new_parent: OptionalId)
     where
-        Id: Into<Option<NodeId>>,
+        OptionalId: Into<Option<NodeId>>,
     {
         self.parent = new_parent.into()
     }
@@ -218,7 +213,7 @@ impl NodeId {
     ///
     /// assert_eq!(root_node.children(arena), &vec![
     ///     NodeId::from(1),
-    ///     NodeId::from(2)
+    ///     NodeId::from(2),
     /// ]);
     /// ```
     pub fn add_child<T>(&self, arena: &mut Arena<T>, child: NodeId) -> &Self
