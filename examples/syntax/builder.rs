@@ -3,7 +3,7 @@
 use crate::token::*;
 use crate::node::*;
 use crate::cache::Cache;
-use cavea::{Arena, Node, NodeId};
+use isaac::{Arena, Node, NodeId};
 use std::rc::Rc;
 
 #[macro_export]

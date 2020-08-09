@@ -1,4 +1,4 @@
-use cavea::Arena;
+use isaac::Arena;
 
 fn main() {
     // Initialising a new arena.

@@ -4,7 +4,7 @@ mod node;
 mod token;
 
 use builder::SyntaxBuilder;
-use cavea::Arena;
+use isaac::Arena;
 
 fn main() {
     // a * (-2 + a) - 10
@@ -18,26 +18,26 @@ fn main() {
     //       -   a
     //       |
     //       2
-    let mut builder = SyntaxBuilder::new(Arena::new());
+    let mut b = SyntaxBuilder::new(Arena::new());
 
-    make!(builder => binary {
-        make!(builder => binary {
-            make!(builder => token { "a", 0 }),
-            make!(builder => token { "*", 2 }),
-            make!(builder => group {
-                make!(builder => binary {
-                    make!(builder => unary {
-                        make!(builder => token { "-", 5 }),
-                        make!(builder => token { "2", 6 }),
+    make!(b => binary {
+        make!(b => binary {
+            make!(b => token { "a", 0 }),
+            make!(b => token { "*", 2 }),
+            make!(b => group {
+                make!(b => binary {
+                    make!(b => unary {
+                        make!(b => token { "-", 5 }),
+                        make!(b => token { "2", 6 }),
                     }),
-                    make!(builder => token { "+", 8 }),
-                    make!(builder => token { "a", 10 }),
+                    make!(b => token { "+", 8 }),
+                    make!(b => token { "a", 10 }),
                 }),
             }),
         }),
-        make!(builder => token { "-", 13 }),
-        make!(builder => token { "10", 15 }),
+        make!(b => token { "-", 13 }),
+        make!(b => token { "10", 15 }),
     });
 
-    println!("{:#?}", builder.nodes());
+    println!("{:#?}", b.nodes());
 }
