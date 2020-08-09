@@ -84,12 +84,27 @@ pub struct Node<T> {
 }
 
 impl<T> Node<T> {
-    /// Creates a new `Node` with the given `NodeId` index and data.
+    /// Creates a new `Node` with the given index and data.
     pub fn new<Id>(id: Id, data: T) -> Self
     where
         Id: Into<NodeId>,
     {
-        Self { id: id.into(), data, parent: None, children: Vec::new() }
+        Self::with(id, data, None, Vec::new())
+    }
+
+    /// Creates a new `Node` with the given index, data, optional parent, and
+    /// children.
+    pub fn with<Id, P>(id: Id, data: T, parent: P, children: Vec<Id>) -> Self
+    where
+        Id: Into<NodeId>,
+         P: Into<Option<NodeId>>,
+    {
+        Self {
+            id: id.into(),
+            data,
+            parent: parent.into(),
+            children: children.into_iter().map(Id::into).collect()
+        }
     }
 
     /// Returns the `NodeId` identifier of the node.
@@ -98,6 +113,11 @@ impl<T> Node<T> {
     /// a `usize` that represents its position in the `Arena`.
     pub fn id(&self) -> NodeId {
         self.id
+    }
+
+    /// Returns a reference to the data contained in the node.
+    pub fn data(&self) -> &T {
+        &self.data
     }
 
     /// Returns the `NodeId` identifier of this node's parent.
@@ -250,7 +270,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_syntax_arena() {
+    fn test_syntax_arena_internal() {
         //     1
         //    / \
         //   2   3
@@ -299,5 +319,37 @@ mod tests {
             ],
             root: Some(NodeId(0)),
         });
+    }
+
+    #[test]
+    fn test_syntax_arena() {
+        //     1
+        //    / \
+        //   2   3
+        //       |
+        //       4
+        let arena = &mut Arena::new();
+
+        let str_1 = arena.insert("1");
+        let str_2 = arena.insert("2");
+        let str_3 = arena.insert("3");
+        let str_4 = arena.insert("4");
+
+        str_1
+        .add_child(arena, str_2)
+        .add_child(arena, str_3);
+
+        str_3
+            .add_child(arena, str_4);
+
+        assert_eq!(str_1.parent(arena), None);
+        assert_eq!(str_2.parent(arena), Some(str_1));
+        assert_eq!(str_3.parent(arena), Some(str_1));
+        assert_eq!(str_4.parent(arena), Some(str_3));
+
+        assert_eq!(str_1.children(arena), &vec![str_2, str_3]);
+        assert_eq!(str_2.children(arena), &vec![]);
+        assert_eq!(str_3.children(arena), &vec![str_4]);
+        assert_eq!(str_4.children(arena), &vec![]);
     }
 }
