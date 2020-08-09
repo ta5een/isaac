@@ -8,5 +8,9 @@ edition = "2018"
 
 [dependencies]
 
+
+[[example]]
+name = "simple"
+
 [[example]]
 name = "syntax"
