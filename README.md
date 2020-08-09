@@ -6,7 +6,7 @@ An <ins>**i**</ins>ndubitably <ins>**s**</ins>imple <ins>**a**</ins>llocation
 ## Example
 
 ```rust
-use cavea::Arena;
+use isaac::Arena;
 
 // We want to make a simple graph structure like this:
 //
